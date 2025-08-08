@@ -30,8 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
+LOGIN_REDIRECT_URL = 'authentication:login_redirect'
+LOGIN_URL = 'authentication:login'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -60,7 +60,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
