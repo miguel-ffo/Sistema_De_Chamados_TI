@@ -1,0 +1,54 @@
+[
+    {   
+        "categoria_nome": "Hardware",
+        "subcategorias": [
+        "Problemas com Computador ou Notebook",
+        "Problemas com Impressora ou Scanner",
+        "Problemas com Monitor",
+        "Problemas com Teclado ou Rato",
+        "Problemas com Telefone Fixo / VOIP",
+        "Instalação ou Movimentação de Equipamento"
+        ]
+    },
+    {
+        "categoria_nome": "Software e Sistemas",
+        "subcategorias": [
+        "Erro no Sistema Operacional (Windows)",
+        "Problemas com Pacote Office (Word, Excel, Outlook)",
+        "Problemas com Software da SUDEMA",
+        "Instalação ou Remoção de Programa",
+        "Suspeita de Vírus ou Malware",
+        "Erro no Navegador de Internet (Chrome, Firefox)"
+        ]
+    },
+    {
+        "categoria_nome": "Acessos e Permissões",
+        "subcategorias": [
+        "Reset de Senha",
+        "Desbloqueio de Conta de Usuário",
+        "Acesso a Pastas de Rede Partilhadas",
+        "Acesso a Sistemas Internos",
+        "Criação de Conta para Novo Colaborador",
+        "Desativação de Conta de Ex-Colaborador"
+        ]
+    },
+    {
+        "categoria_nome": "Redes e Internet",
+        "subcategorias": [
+        "Computador sem acesso à Rede ou Internet",
+        "Problemas com a rede Wi-Fi",
+        "Ativação de Ponto de Rede",
+        "Lentidão excessiva na Internet",
+        "Problemas com acesso VPN"
+        ]
+    },
+    {
+        "categoria_nome": "Solicitações Gerais",
+        "subcategorias": [
+        "Pedido de Equipamento",
+        "Pedido de Suprimentos (Toner, Papel, etc.)",
+        "Dúvida sobre utilização de Software",
+        "Outros Assuntos"
+        ]
+    }
+]
