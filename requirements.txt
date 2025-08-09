@@ -1,0 +1,10 @@
+﻿asgiref==3.9.1
+Django==5.2.4
+django-auth-ldap==5.2.0
+pyasn1==0.6.1
+pyasn1_modules==0.4.2
+python-ldap @ file:python_ldap-3.4.4-cp313-cp313-win_amd64.whl#sha256=c2831fd04489bce08f7c11f6d0f48197db23c448b9a1ecc2359db69f2012c15e
+sqlparse==0.5.3
+tzdata==2025.2
+dotenv
+django-jazzmin
