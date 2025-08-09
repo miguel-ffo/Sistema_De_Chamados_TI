@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Chamados - Sistema de Chamados{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Histórico de Chamados Fechados</h1>
+    {% if is_tecnico %}
+        <a href="{% url 'tickets:dashboard_tecnico' %}" class="btn btn-secondary">&larr; Voltar para o Painel</a>
+    {% else %}
+        <a href="{% url 'tickets:dashboard_usuario' %}" class="btn btn-secondary">&larr; Voltar para Meus Chamados</a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Subcategoria</th>
+                        {% if is_tecnico %}
+                            <th scope="col">Criado por</th>
+                        {% endif %}
+                        <th scope="col">Técnico</th>
+                        <th scope="col">Data de Abertura</th>
+                        <th scope="col">Data de Conclusão</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chamado in chamados %}
+                        <tr>
+                            <th scope="row">#{{ chamado.id }}</th>
+                            <td>{{ chamado.subcategoria.nome }}</td>
+                            {% if is_tecnico %}
+                                <td>{{ chamado.usuario.username }}</td>
+                            {% endif %}
+                            <td>{{ chamado.tecnico.username|default:"-" }}</td>
+                            <td>{{ chamado.data_abertura|date:"d/m/Y H:i" }}</td>
+                            <td>{{ chamado.data_conclusao|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <a href="{% url 'tickets:detalhe' chamado.id %}" class="btn btn-sm btn-outline-info">Ver Detalhes</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="{% if is_tecnico %}7{% else %}6{% endif %}" class="text-center">
+                                Nenhum chamado fechado encontrado no histórico.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

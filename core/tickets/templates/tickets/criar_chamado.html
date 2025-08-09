@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Abrir Novo Chamado - Sistema de Chamados{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="mb-0">Abrir Novo Chamado</h1>
+            </div>
+            <div class="card-body">
+                <form method="post" id="chamadoForm">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    
+                    <hr>
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ request.META.HTTP_REFERER|default:'tickets:dashboard_usuario' }}" class="btn btn-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Enviar Chamado</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('id_categoria').addEventListener('change', function() {
+        const categoriaId = this.value;
+        const subcategoriaSelect = document.getElementById('id_subcategoria');
+        
+        subcategoriaSelect.innerHTML = '<option value="">---------</option>';
+
+        if (categoriaId) {
+            fetch(`/tickets/api/get-subcategorias/?categoria_id=${categoriaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(function(subcategoria) {
+                        const option = new Option(subcategoria.nome, subcategoria.id);
+                        subcategoriaSelect.appendChild(option);
+                    });
+                });
+        }
+    });
+</script>
+
+{% endblock %}

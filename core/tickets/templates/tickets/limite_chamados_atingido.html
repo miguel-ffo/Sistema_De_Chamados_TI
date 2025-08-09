@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Limite de Chamados Atingido - Sistema de Chamados{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card text-center border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h1 class="mb-0">Atenção: Limite de Chamados Atingido</h1>
+            </div>
+            <div class="card-body">
+                <p class="card-text fs-5">
+                    Você atingiu o limite de **{{ limite }}** chamados concluídos que ainda não foram avaliados.
+                </p>
+                <p>
+                    Atualmente, você tem <strong>{{ pendentes }} chamados pendentes de avaliação</strong>.
+                </p>
+                <p class="text-muted">
+                    Para poder abrir novos chamados, por favor, aceda ao seu painel e finalize a avaliação dos seus chamados concluídos.
+                </p>
+            </div>
+            <div class="card-footer text-muted">
+                <a href="{% url 'tickets:dashboard_usuario' %}" class="btn btn-primary">Ir para Meus Chamados</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

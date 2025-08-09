@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar Cancelamento - Sistema de Chamados{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card text-center border-danger">
+            <div class="card-header bg-danger text-white">
+                <h1 class="mb-0">Confirmar Cancelamento</h1>
+            </div>
+            <div class="card-body">
+                <p class="card-text fs-5">Você tem a certeza que deseja cancelar o Chamado #{{ chamado.id }}?</p>
+                <p><strong>Subcategoria:</strong> {{ chamado.subcategoria.nome }}</p>
+                <p class="text-danger"><strong>Esta ação não pode ser desfeita.</strong></p>
+            </div>
+            <div class="card-footer text-muted">
+                <form action="{% url 'tickets:cancelar' chamado.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Sim, cancelar o chamado</button>
+                </form>
+                <a href="{% url 'tickets:detalhe' chamado.id %}" class="btn btn-secondary">Não, voltar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Painel do Técnico - Sistema de Chamados{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Chamados na Fila (Não Atribuídos)</h2>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for chamado in chamados_na_fila %}
+                        <a href="{% url 'tickets:detalhe' chamado.id %}" class="list-group-item list-group-item-action bg-dark text-light">
+                            #{{ chamado.id }} - {{ chamado.subcategoria.nome }}
+                            <small class="d-block text-muted">Aberto em: {{ chamado.data_abertura|date:"d/m/Y H:i" }}</small>
+                        </a>
+                    {% empty %}
+                        <li class="list-group-item bg-dark text-light">Não há chamados na fila.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Meus Atendimentos</h2>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for chamado in meus_atendimentos %}
+                        <a href="{% url 'tickets:detalhe' chamado.id %}" class="list-group-item list-group-item-action bg-dark text-light">
+                        #{{ chamado.id }} - {{ chamado.subcategoria.nome }} ({{ chamado.get_status_display }})
+                        <small class="d-block text-muted">Criado por: {{ chamado.usuario.username }}</small>
+                        </a>
+                    {% empty %}
+                        <li class="list-group-item bg-dark text-light">Você não tem nenhum chamado em atendimento.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

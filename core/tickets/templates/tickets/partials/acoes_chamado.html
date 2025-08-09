@@ -1,0 +1,80 @@
+{% comment %}
+Este ficheiro tem um único bloco IF principal:
+- Se o usuário for técnico, ele entra na primeira parte.
+- Se não for, ele entra na parte do ELSE, que é exclusiva para usuários comuns.
+Isto evita que um técnico veja as ações de um usuário.
+{% endcomment %}
+
+{% if is_tecnico %}
+    {% if user == chamado.tecnico %}
+        <p><strong>Você é o técnico responsável.</strong></p>
+        
+        {% if chamado.esta_finalizado %}
+            <p class="text-muted">Este chamado está finalizado e não permite mais ações.</p>
+        {% else %}
+            <div class="mb-3">
+                <form action="{% url 'tickets:adicionar_comentario' chamado.id %}" method="post">
+                    {% csrf_token %}{{ form_comentario.as_p }}
+                    <button class="btn btn-primary w-100" type="submit">Adicionar Comentário</button>
+                </form>
+            </div>
+            <div class="mb-3">
+                <form action="{% url 'tickets:atualizar_status' chamado.id %}" method="post">
+                    {% csrf_token %}{{ form_status.as_p }}
+                    <button class="btn btn-secondary w-100" type="submit">Atualizar Status</button>
+                </form>
+            </div>
+            {% if chamado.status == 'EM_ATENDIMENTO' %}
+                <div class="d-grid">
+                    <a href="{% url 'tickets:resolver' chamado.id %}" class="btn btn-success">Resolver Chamado</a>
+                </div>
+            {% endif %}
+        {% endif %}
+
+    {% elif chamado.tecnico is None and chamado.status == 'ABERTO' %}
+        <div class="d-grid">
+            <form action="{% url 'tickets:aceitar' chamado.id %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit">Aceitar este Chamado</button>
+            </form>
+        </div>
+
+    {% else %}
+        <p class="text-muted">Atendido por: {{ chamado.tecnico.get_full_name|default:chamado.tecnico.username }}.</p>
+    {% endif %}
+
+{% else %}
+    {% if chamado.status == 'ABERTO' %}
+        <div class="d-grid">
+            <a href="{% url 'tickets:cancelar' chamado.id %}" class="btn btn-danger">Cancelar Chamado</a>
+        </div>
+    
+    {% elif chamado.status == 'AGUARDANDO_RESPOSTA' %}
+        <div class="mb-3">
+            <h5 class="text-primary">O técnico precisa da sua resposta:</h5>
+            <form action="{% url 'tickets:adicionar_comentario' chamado.id %}" method="post">
+                {% csrf_token %}{{ form_comentario.as_p }}
+                <button class="btn btn-primary" type="submit">Enviar Comentário</button>
+            </form>
+        </div>
+        <div class="mb-3">
+            <form action="{% url 'tickets:adicionar_anexo' chamado.id %}" method="post">
+                {% csrf_token %}{{ form_anexo.as_p }}
+                <button class="btn btn-secondary" type="submit">Adicionar Caminho do Anexo</button>
+            </form>
+        </div>
+    
+    {% elif chamado.status == 'CONCLUIDO' %}
+        <div class="text-center">
+            <h5 class="text-success">O seu chamado foi concluído!</h5>
+            <p>Por favor, avalie o atendimento para fechar o chamado.</p>
+            <a href="{% url 'tickets:avaliar_e_fechar' chamado.id %}" class="btn btn-success">
+                Avaliar e Fechar Chamado
+            </a>
+        </div>
+    
+    {% else %}
+        <p class="text-muted">Aguardando ação do técnico. Você será notificado sobre atualizações.</p>
+    {% endif %}
+
+{% endif %}

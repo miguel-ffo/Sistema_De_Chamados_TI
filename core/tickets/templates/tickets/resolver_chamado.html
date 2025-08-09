@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar Resolução - Sistema de Chamados{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card text-center border-success">
+            <div class="card-header bg-success text-white">
+                <h1 class="mb-0">Confirmar Resolução</h1>
+            </div>
+            <div class="card-body">
+                <p class="card-text fs-5">Você tem a certeza que deseja marcar o Chamado #{{ chamado.id }} como resolvido?</p>
+                <p><strong>Subcategoria:</strong> {{ chamado.subcategoria.nome }}</p>
+                <p class="text-muted">Após esta ação, o chamado ficará a aguardar a avaliação final do usuário.</p>
+            </div>
+            <div class="card-footer text-muted">
+                <form action="{% url 'tickets:resolver' chamado.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Sim, confirmar resolução</button>
+                </form>
+                <a href="{% url 'tickets:detalhe' chamado.id %}" class="btn btn-secondary">Não, voltar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

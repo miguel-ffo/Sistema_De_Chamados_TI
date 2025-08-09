@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Chamado #{{ chamado.id }} - Sistema de Chamados{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">Chamado #{{ chamado.id }}: {{ chamado.subcategoria.nome }}</h1>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Detalhes do Chamado</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">{{ chamado.get_status_display }}</dd>
+
+                    <dt class="col-sm-4">Prioridade</dt>
+                    <dd class="col-sm-8">{{ chamado.get_prioridade_display }}</dd>
+
+                    <dt class="col-sm-4">Criado por</dt>
+                    <dd class="col-sm-8">{{ chamado.usuario.get_full_name|default:chamado.usuario.username }}</dd>
+
+                    <dt class="col-sm-4">Setor do Solicitante</dt>
+                    <dd class="col-sm-8">
+                        {% for group in chamado.usuario.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% empty %}Nenhum setor definido.{% endfor %}
+                    </dd>
+
+                    <dt class="col-sm-4">Data de Abertura</dt>
+                    <dd class="col-sm-8">{{ chamado.data_abertura }}</dd>
+
+                    <dt class="col-sm-4">Técnico Responsável</dt>
+                    <dd class="col-sm-8">{{ chamado.tecnico.get_full_name|default:"Nenhum técnico atribuído" }}</dd>
+
+                    {% if chamado.data_conclusao %}
+                        <dt class="col-sm-4">Data de Conclusão</dt>
+                        <dd class="col-sm-8">{{ chamado.data_conclusao }}</dd>
+                    {% endif %}
+                </dl>
+                
+                <hr>
+                <h4>Observação Inicial:</h4>
+                <p>{{ chamado.observacao|linebreaks }}</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header"><h3>Anexos</h3></div>
+            <ul class="list-group list-group-flush">
+                {% for anexo in chamado.anexos.all %}
+                    <li class="list-group-item bg-dark text-light">
+                        <a href="file:///{{ anexo.caminho }}">{{ anexo.caminho }}</a>
+                        <small class="d-block text-muted">Adicionado por {{ anexo.usuario_upload.username }} em {{ anexo.data_upload }}</small>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item bg-dark text-light">Nenhum anexo foi adicionado a este chamado.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        {% if chamado.avaliacao %}
+            <div class="card mb-4">
+                <div class="card-header"><h3>Avaliação do Usuário</h3></div>
+                <div class="card-body">
+                     <dl class="row">
+                        <dt class="col-sm-4">Nota</dt>
+                        <dd class="col-sm-8">{{ chamado.avaliacao.nota }} / 5</dd>
+                        {% if chamado.avaliacao.descricao %}
+                            <dt class="col-sm-4">Comentário</dt>
+                            <dd class="col-sm-8">{{ chamado.avaliacao.descricao|linebreaks }}</dd>
+                        {% endif %}
+                        <dt class="col-sm-4">Data</dt>
+                        <dd class="col-sm-8">{{ chamado.avaliacao.data_avaliacao }}</dd>
+                    </dl>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header"><h3>Ações e Respostas</h3></div>
+            <div class="card-body">
+                {% include 'tickets/partials/acoes_chamado.html' %}
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header"><h3>Histórico</h3></div>
+            <div class="card-body">
+                {% for comentario in comentarios %}
+                    <div class="mb-3">
+                        <strong>{{ comentario.usuario.get_full_name|default:comentario.usuario.username }}</strong>
+                        <small class="text-muted">em {{ comentario.data_criacao }}</small>
+                        <p>{{ comentario.conteudo|linebreaks }}</p>
+                    </div>
+                    {% if not forloop.last %}<hr>{% endif %}
+                {% empty %}
+                    <p>Nenhum comentário ainda.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
